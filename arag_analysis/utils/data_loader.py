@@ -5,10 +5,15 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 import streamlit as st
+from pathlib import Path
 
 
 @st.cache_data
-def load_data(filepath: str = "../Data Science Sample data.csv") -> pd.DataFrame:
+def load_data(filepath: str = None) -> pd.DataFrame:
+    # Get the directory where this file is located
+    if filepath is None:
+        base_dir = Path(__file__).parent.parent
+        filepath = base_dir / "Data Science Sample data.csv"
     """Load and preprocess the ARAG claims dataset."""
     # Try different encodings to handle special characters like £
     try:

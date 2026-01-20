@@ -37,14 +37,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Load data
-@st.cache_data
-def get_data():
-    try:
-        return load_data("Data Science Sample data.csv")
-    except:
-        return load_data("../Data Science Sample data.csv")
-
-df = get_data()
+df = load_data()
 
 # Key summary metrics
 total_claims = len(df)
