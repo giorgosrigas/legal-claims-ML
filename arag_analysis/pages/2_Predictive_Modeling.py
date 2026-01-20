@@ -490,17 +490,17 @@ def train_forecast_model(ts_features):
     y_train, y_test = y[:split_idx], y[split_idx:]
     dates_test = ts_features['Date'].iloc[split_idx:].values
 
-    # Train optimized Random Forest with better hyperparameters
+    # Train optimized Random Forest (lightweight for cloud deployment)
     model = RandomForestRegressor(
-        n_estimators=300,          # More trees for stability
-        max_depth=15,              # Deeper trees to capture complex patterns
-        min_samples_leaf=2,        # Allow finer splits
-        min_samples_split=4,       # Prevent overfitting
+        n_estimators=50,           # Reduced for Streamlit Cloud
+        max_depth=10,              # Shallower for faster training
+        min_samples_leaf=5,        # Prevent overfitting
+        min_samples_split=10,      # Faster training
         max_features='sqrt',       # Feature subsampling for diversity
         bootstrap=True,
         oob_score=True,            # Out-of-bag score for validation
         random_state=42,
-        n_jobs=-1
+        n_jobs=1                   # Single thread for stability
     )
     model.fit(X_train, y_train)
 
@@ -825,10 +825,10 @@ if len(litigation_df) > 100:
     # Train with Balanced Random Forest and optimize threshold for F1
     def train_cost_model(_X_train, _y_train, _X_test, _y_test):
         model = BalancedRandomForestClassifier(
-            n_estimators=500,
-            max_depth=9,
+            n_estimators=50,       # Reduced for Streamlit Cloud
+            max_depth=8,
             random_state=154,
-            n_jobs=-1,
+            n_jobs=1,              # Single thread for stability
             sampling_strategy='all',
             replacement=True,
             class_weight='balanced_subsample'
@@ -1070,10 +1070,10 @@ if len(litigation_with_time) > 100:
     # Train with Balanced Random Forest and optimize threshold for F1
     def train_duration_model(_X_train, _y_train, _X_test, _y_test):
         model = BalancedRandomForestClassifier(
-            n_estimators=500,
-            max_depth=12,
+            n_estimators=50,       # Reduced for Streamlit Cloud
+            max_depth=8,
             random_state=42,
-            n_jobs=-1,
+            n_jobs=1,              # Single thread for stability
             sampling_strategy='all',
             replacement=True,
             class_weight='balanced_subsample'
@@ -1292,7 +1292,7 @@ st.markdown("""
 
 # Prepare clustering data and train model in one function to ensure alignment
 @st.cache_data
-def prepare_and_cluster_data(df, n_clusters=4, sample_size=10000):
+def prepare_and_cluster_data(df, n_clusters=4, sample_size=5000):
     """Prepare data for clustering and train K-Means model."""
     # Use all claims (not just closed) since we're using intake features
     cluster_df = df.copy()
