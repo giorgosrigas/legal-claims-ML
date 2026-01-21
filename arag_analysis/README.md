@@ -1,6 +1,3 @@
-# ARAG Claims Intelligence Platform
-
-A comprehensive data science analysis of legal expense insurance claims, built with Streamlit.
 
 ## Quick Start
 
