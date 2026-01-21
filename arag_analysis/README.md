@@ -72,7 +72,3 @@ arag_analysis/
 - **Total Costs:** £X million
 - **ML Model Performance:** Accuracy, Precision, Recall metrics
 - **Identified Savings Potential:** 8-10% cost reduction
-
-## Author
-
-Data Science Take-Home Assessment for ARAG
